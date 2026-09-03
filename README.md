@@ -8,7 +8,7 @@ A premium consumer-electronics storefront built to explore Apple-style product m
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)
 ![GSAP](https://img.shields.io/badge/GSAP-3-88CE02?logo=greensock&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![CI](https://github.com/<your-username>/techne-ecommerce/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/mertyerturun/Techne_E-Commerce/actions/workflows/ci.yml/badge.svg)
 
 <p align="center">
   <img src="docs/screenshots/homepage.jpg" alt="TECHNE homepage — product hero section" width="49%" />
@@ -41,8 +41,8 @@ Content is in Turkish; the codebase, structure, and this README are in English.
 ## Getting started
 
 ```bash
-git clone https://github.com/<your-username>/techne-ecommerce.git
-cd techne-ecommerce
+git clone https://github.com/mertyerturun/Techne_E-Commerce.git
+cd Techne_E-Commerce
 npm install
 npm run dev
 ```
