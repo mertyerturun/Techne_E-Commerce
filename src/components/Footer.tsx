@@ -1,6 +1,11 @@
+"use client";
+
 import Image from "next/image";
+import { useLocale } from "@/lib/i18n";
 
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
     <footer className="mt-auto bg-surface-tertiary">
       <div className="mx-auto max-w-(--container-max) px-5 py-16 md:px-10">
@@ -10,7 +15,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-black/10 pt-6 text-xs text-on-surface-variant md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} TECHNE A.Ş. Tüm hakları saklıdır.</p>
+          <p>{t.footer.rights(new Date().getFullYear())}</p>
           <div className="flex items-center gap-1.5">
             <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
               <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
@@ -20,7 +25,7 @@ export default function Footer() {
                 strokeWidth="1.5"
               />
             </svg>
-            <span>Türkiye</span>
+            <span>{t.footer.country}</span>
           </div>
         </div>
       </div>

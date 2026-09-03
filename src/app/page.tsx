@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/Button";
@@ -6,8 +8,10 @@ import Reveal from "@/components/motion/Reveal";
 import Parallax from "@/components/motion/Parallax";
 import FluidFlowGrid from "@/components/ui/fluid-flow-grid";
 import { getProduct, products } from "@/lib/products";
+import { useLocale } from "@/lib/i18n";
 
 export default function Home() {
+  const { locale, t } = useLocale();
   const featured = products.filter((p) => p.featured);
   const gridProducts = products.filter(
     (p) => !p.featured && ["aura-buds", "timepiece-pro", "magpower"].includes(p.slug)
@@ -26,27 +30,27 @@ export default function Home() {
             height={135}
             className="mx-auto mb-3 h-3 w-auto brightness-0 invert opacity-60"
           />
-          <h1 className="text-display-lg">Gelecek Burada.</h1>
+          <h1 className="text-display-lg">{t.home.heroTitle}</h1>
         </Reveal>
       </FluidFlowGrid>
 
       <section className="bg-surface-tertiary px-5 pb-20 pt-16 text-center md:px-10">
         <Reveal y={20} delay={0.15} start="top 95%">
           <p className="mx-auto max-w-2xl text-headline-lg text-on-surface-variant">
-            Yeni Nesil Deneyim. İnanılmaz güç, kusursuz tasarım.
+            {t.home.heroSubtitle}
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">
             <Button href={`/product/${technePro.slug}`} variant="primary">
-              Satın Al
+              {t.home.buyNow}
             </Button>
             <Button href={`/product/${technePro.slug}`} variant="secondary">
-              Daha Fazla Bilgi
+              {t.home.learnMore}
             </Button>
           </div>
         </Reveal>
         <Reveal y={40} scale={0.96} delay={0.1} start="top 90%">
           <Parallax strength={24} className="relative mx-auto mt-16 aspect-16/9 w-full max-w-3xl">
-            <Image src={technePro.image} alt={technePro.name} fill className="object-contain" />
+            <Image src={technePro.image} alt={technePro.name[locale]} fill className="object-contain" />
           </Parallax>
         </Reveal>
       </section>
@@ -54,7 +58,7 @@ export default function Home() {
       {/* Featured */}
       <section className="mx-auto max-w-(--container-max) px-5 py-20 md:px-10">
         <Reveal>
-          <h2 className="text-headline-xl">Öne Çıkarılan</h2>
+          <h2 className="text-headline-xl">{t.home.featured}</h2>
         </Reveal>
         <Reveal stagger={0.15} y={40} scale={0.97} start="top 88%" className="mt-10 grid gap-6 md:grid-cols-2">
           {featured.map((product) => (
@@ -65,19 +69,19 @@ export default function Home() {
                 product.featured === "dark" ? "bg-black text-white" : ""
               }`}
             >
-              <h3 className="text-headline-lg">{product.cardTitle}</h3>
+              <h3 className="text-headline-lg">{product.cardTitle[locale]}</h3>
               <p
                 className={`mt-1 text-body-md ${
                   product.featured === "dark" ? "text-white/70" : "text-on-surface-variant"
                 }`}
               >
-                {product.cardSubtitle}
+                {product.cardSubtitle[locale]}
               </p>
               <span className="mt-4 text-sm font-medium underline-offset-4 hover:underline">
-                Satın Al ›
+                {t.home.buyNowArrow}
               </span>
               <div className="relative mt-8 aspect-16/10 w-full max-w-sm">
-                <Image src={product.image} alt={product.name} fill className="object-contain" />
+                <Image src={product.image} alt={product.name[locale]} fill className="object-contain" />
               </div>
             </Link>
           ))}
@@ -95,10 +99,9 @@ export default function Home() {
               strokeLinejoin="round"
             />
           </svg>
-          <h2 className="mt-6 text-headline-xl">Kusursuz İşçilik.</h2>
+          <h2 className="mt-6 text-headline-xl">{t.home.craftsmanshipTitle}</h2>
           <p className="mx-auto mt-4 max-w-xl text-body-lg text-on-surface-variant">
-            Her bir detay, mükemmellik arayışımızın bir yansımasıdır. Tasarımın sınırlarını zorluyor,
-            teknolojiyi sanatla buluşturuyoruz.
+            {t.home.craftsmanshipBody}
           </p>
         </Reveal>
       </section>
@@ -115,13 +118,12 @@ export default function Home() {
       {/* Story CTA */}
       <section className="mx-auto max-w-(--container-max) px-5 py-24 text-center md:px-10">
         <Reveal y={24} start="top 85%">
-          <h2 className="text-headline-xl">Bir yaşam tarzı.</h2>
+          <h2 className="text-headline-xl">{t.home.lifestyleTitle}</h2>
           <p className="mx-auto mt-4 max-w-xl text-body-lg text-on-surface-variant">
-            TECHNE&apos;de teknolojiyi sanatla buluşturuyoruz. Sadece bir cihaz değil, bir yaşam tarzı
-            sunuyoruz.
+            {t.home.lifestyleBody}
           </p>
           <Link href="#" className="btn btn-ghost mt-6">
-            Hikayemizi Keşfedin →
+            {t.home.discoverStory}
           </Link>
         </Reveal>
       </section>

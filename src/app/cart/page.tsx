@@ -6,30 +6,28 @@ import Button from "@/components/Button";
 import Reveal from "@/components/motion/Reveal";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice, getProduct } from "@/lib/products";
+import { useLocale } from "@/lib/i18n";
 
 const upsellSlugs = ["magpower-bank", "pro-sarj-kablosu", "seffaf-kilif"];
 
 export default function CartPage() {
   const { lines, hydrated, setQty, removeItem, addItem, subtotal } = useCart();
+  const { locale, t } = useLocale();
   const upsellProducts = upsellSlugs.map((slug) => getProduct(slug)!);
 
   return (
     <div className="mx-auto max-w-(--container-max) px-5 py-16 md:px-10">
       <Reveal y={20} duration={0.9} start="top 95%">
-        <h1 className="text-display-lg">Alışveriş Çantanız.</h1>
-        <p className="mt-3 text-body-lg text-on-surface-variant">
-          Siparişiniz ücretsiz gönderim için uygundur.
-        </p>
+        <h1 className="text-display-lg">{t.cart.title}</h1>
+        <p className="mt-3 text-body-lg text-on-surface-variant">{t.cart.subtitle}</p>
       </Reveal>
 
       {hydrated && lines.length === 0 ? (
         <Reveal y={24} scale={0.98} className="card-ambient mt-12 flex flex-col items-center gap-4 p-16 text-center">
-          <p className="text-headline-lg">Sepetiniz boş.</p>
-          <p className="text-body-md text-on-surface-variant">
-            Ürünlerimize göz atın ve favorilerinizi sepetinize ekleyin.
-          </p>
+          <p className="text-headline-lg">{t.cart.empty}</p>
+          <p className="text-body-md text-on-surface-variant">{t.cart.emptyBody}</p>
           <Button href="/" variant="primary" className="mt-2">
-            Alışverişe Başla
+            {t.cart.startShopping}
           </Button>
         </Reveal>
       ) : (
@@ -49,7 +47,7 @@ export default function CartPage() {
                       )}
                     </div>
                     <p className="font-medium whitespace-nowrap">
-                      {formatPrice(line.unitPrice * line.qty)}
+                      {formatPrice(line.unitPrice * line.qty, locale)}
                     </p>
                   </div>
                   <div className="flex items-center justify-between">
@@ -57,7 +55,7 @@ export default function CartPage() {
                       value={line.qty}
                       onChange={(e) => setQty(line.id, Number(e.target.value))}
                       className="rounded-md border border-black/10 bg-white px-3 py-1.5 text-sm"
-                      aria-label={`${line.name} adet`}
+                      aria-label={t.cart.qtyAriaLabel(line.name)}
                     >
                       {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => (
                         <option key={n} value={n}>
@@ -69,7 +67,7 @@ export default function CartPage() {
                       onClick={() => removeItem(line.id)}
                       className="text-sm text-on-surface-variant underline-offset-4 hover:text-on-surface hover:underline"
                     >
-                      Kaldır
+                      {t.cart.remove}
                     </button>
                   </div>
                 </div>
@@ -78,23 +76,23 @@ export default function CartPage() {
           </Reveal>
 
           <Reveal y={24} scale={0.97} start="top 90%" className="card-ambient h-fit p-6">
-            <h2 className="text-headline-lg">Sipariş Özeti</h2>
+            <h2 className="text-headline-lg">{t.cart.orderSummary}</h2>
             <div className="mt-6 space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-on-surface-variant">Ara Toplam</span>
-                <span>{formatPrice(subtotal)}</span>
+                <span className="text-on-surface-variant">{t.cart.subtotal}</span>
+                <span>{formatPrice(subtotal, locale)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-on-surface-variant">Gönderim</span>
-                <span>Ücretsiz</span>
+                <span className="text-on-surface-variant">{t.cart.shipping}</span>
+                <span>{t.cart.free}</span>
               </div>
             </div>
             <div className="mt-4 flex justify-between border-t border-black/10 pt-4 font-semibold">
-              <span>Toplam</span>
-              <span>{formatPrice(subtotal)}</span>
+              <span>{t.cart.total}</span>
+              <span>{formatPrice(subtotal, locale)}</span>
             </div>
             <Button variant="primary" className="mt-6 w-full">
-              Ödemeye Geç
+              {t.cart.checkout}
             </Button>
           </Reveal>
         </div>
@@ -103,24 +101,24 @@ export default function CartPage() {
       {/* Upsell */}
       <section className="mt-24">
         <Reveal>
-          <h2 className="text-headline-lg">Bunları da beğenebilirsiniz.</h2>
+          <h2 className="text-headline-lg">{t.cart.alsoLike}</h2>
         </Reveal>
         <Reveal stagger={0.1} y={28} start="top 90%" className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {upsellProducts.map((product) => (
             <div key={product.slug} className="card-ambient flex flex-col items-center p-8 text-center">
               <Link href={`/product/${product.slug}`} className="relative aspect-square w-full max-w-[160px]">
-                <Image src={product.image} alt={product.name} fill className="object-contain" />
+                <Image src={product.image} alt={product.name[locale]} fill className="object-contain" />
               </Link>
-              <h3 className="mt-4 font-semibold">{product.cardTitle}</h3>
-              <p className="mt-1 text-sm text-on-surface-variant">{product.cardSubtitle}</p>
-              <p className="mt-3 font-medium">{formatPrice(product.basePrice)}</p>
+              <h3 className="mt-4 font-semibold">{product.cardTitle[locale]}</h3>
+              <p className="mt-1 text-sm text-on-surface-variant">{product.cardSubtitle[locale]}</p>
+              <p className="mt-3 font-medium">{formatPrice(product.basePrice, locale)}</p>
               <button
                 onClick={() =>
                   addItem(
                     {
                       id: product.slug,
                       slug: product.slug,
-                      name: product.name,
+                      name: product.name[locale],
                       unitPrice: product.basePrice,
                       image: product.image,
                     },
@@ -129,7 +127,7 @@ export default function CartPage() {
                 }
                 className="btn btn-secondary mt-4 !py-2 !px-6 text-sm"
               >
-                Ekle
+                {t.cart.add}
               </button>
             </div>
           ))}
