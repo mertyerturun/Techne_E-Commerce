@@ -37,6 +37,7 @@ Content is in Turkish; the codebase, structure, and this README are in English.
 - [Tailwind CSS v4](https://tailwindcss.com/)
 - [GSAP](https://gsap.com/) + `@gsap/react` (`useGSAP`) for scroll animation
 - ESLint (`eslint-config-next`)
+- [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react) for unit/integration tests
 
 ## Getting started
 
@@ -49,7 +50,16 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-Other scripts: `npm run build`, `npm start`, `npm run lint`.
+Other scripts: `npm run build`, `npm start`, `npm run lint`, `npm run test`.
+
+## Testing
+
+```bash
+npm run test        # run once (CI mode)
+npm run test:watch  # watch mode
+```
+
+20 tests across cart state, the locale system, product data, and the navbar, using Vitest + React Testing Library. Runs on every push/PR via GitHub Actions (see badge above). One test is a regression test for a real hydration-race bug found during development: an effect syncing locale to `localStorage` could run with a stale default before the storage-read effect's state update committed, silently resetting a saved language preference back to Turkish on every page load — see `src/lib/i18n.test.tsx`.
 
 ## Project structure
 
@@ -64,11 +74,14 @@ src/
 │  ├─ motion/                  # Reveal / Parallax GSAP primitives
 │  ├─ Navbar.tsx, Footer.tsx, Button.tsx
 │  ├─ ProductCard.tsx, ProductDetail.tsx, HighlightIcon.tsx
-│  └─ ui/fluid-flow-grid.tsx
+│  ├─ ui/fluid-flow-grid.tsx
+│  └─ *.test.tsx                # component tests, colocated
 └─ lib/
-   ├─ products.ts               # Typed product catalog (static data)
+   ├─ products.ts               # Typed, localized product catalog (static data)
    ├─ cart-context.tsx          # Cart state (Context + useReducer + localStorage)
-   └─ gsap.ts                   # GSAP/ScrollTrigger registration
+   ├─ i18n.tsx, locale.ts       # Turkish/English locale context + UI dictionary
+   ├─ gsap.ts                   # GSAP/ScrollTrigger registration
+   └─ *.test.ts(x)              # unit tests, colocated
 ```
 
 ## License

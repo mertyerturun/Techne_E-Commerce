@@ -4,7 +4,7 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useReducer,
   type ReactNode,
 } from "react";
 import type { Locale } from "./locale";
@@ -175,35 +175,47 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
+type LocaleState = { locale: Locale; hydrated: boolean };
+type LocaleAction = { type: "SET_LOCALE"; locale: Locale };
+
+function localeReducer(state: LocaleState, action: LocaleAction): LocaleState {
+  switch (action.type) {
+    case "SET_LOCALE":
+      return { locale: action.locale, hydrated: true };
+    default:
+      return state;
+  }
+}
+
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("tr");
-  const [hydrated, setHydrated] = useState(false);
+  const [state, dispatch] = useReducer(localeReducer, { locale: "tr", hydrated: false });
 
   useEffect(() => {
+    let stored: Locale = "tr";
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored === "tr" || stored === "en") setLocaleState(stored);
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw === "tr" || raw === "en") stored = raw;
     } catch {
       // ignore
     }
-    setHydrated(true);
+    dispatch({ type: "SET_LOCALE", locale: stored });
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = locale;
-    if (!hydrated) return;
+    document.documentElement.lang = state.locale;
+    if (!state.hydrated) return;
     try {
-      window.localStorage.setItem(STORAGE_KEY, locale);
+      window.localStorage.setItem(STORAGE_KEY, state.locale);
     } catch {
       // ignore
     }
-  }, [locale, hydrated]);
+  }, [state.locale, state.hydrated]);
 
   const value: LocaleContextValue = {
-    locale,
-    setLocale: setLocaleState,
-    toggleLocale: () => setLocaleState((prev) => (prev === "tr" ? "en" : "tr")),
-    t: dictionaries[locale],
+    locale: state.locale,
+    setLocale: (locale) => dispatch({ type: "SET_LOCALE", locale }),
+    toggleLocale: () => dispatch({ type: "SET_LOCALE", locale: state.locale === "tr" ? "en" : "tr" }),
+    t: dictionaries[state.locale],
   };
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
