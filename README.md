@@ -2,6 +2,8 @@
 
 A premium consumer-electronics storefront built to explore Apple-style product marketing pages in Next.js — scroll-driven storytelling, a token-based design system, and a real (client-side) cart, rather than a generic CRUD shop template.
 
+**Live demo: [techne-e-commerce.vercel.app](https://techne-e-commerce.vercel.app/)**
+
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
@@ -19,7 +21,7 @@ A premium consumer-electronics storefront built to explore Apple-style product m
 
 TECHNE is a fictional consumer-electronics brand (laptop, tablet, earbuds, watch, power bank) built as a front-end showcase. The goal was to reproduce the feel of a high-end product page — restrained typography, generous whitespace, and animation that reinforces the content instead of decorating it — while keeping the implementation clean enough to actually maintain.
 
-Content is in Turkish; the codebase, structure, and this README are in English.
+The site itself is bilingual (Turkish/English, switchable from the navbar); the codebase, structure, and this README are in English.
 
 ## Features
 
@@ -27,6 +29,7 @@ Content is in Turkish; the codebase, structure, and this README are in English.
 - **App Router product catalog** — dynamic product routes (`src/app/product/[slug]`) render from a single typed data source (`src/lib/products.ts`), each with its own hero, spec table, and highlight grid.
 - **Persistent cart** — a `useReducer`-backed `CartContext` (`src/lib/cart-context.tsx`) handles add/update/remove/clear and syncs to `localStorage`, with a hydration guard so the SSR'd page never flashes stale client state.
 - **Token-driven design system** — colors, type scale, spacing, and elevation are defined once (see `DESIGN.md`, "Aura Precision") and consumed as Tailwind v4 CSS variables, keeping the UI visually consistent without magic numbers scattered through components.
+- **Turkish/English localization** — a one-click language toggle (`src/lib/i18n.tsx`) switches the whole site instantly, no page reload, choice persisted to `localStorage`. All UI copy and the full product catalog are localized.
 - **Fully responsive**, keyboard-accessible interactive elements (storage/variant pickers, quantity steppers, mobile nav).
 
 ## Tech stack
