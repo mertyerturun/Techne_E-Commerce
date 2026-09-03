@@ -11,8 +11,8 @@ A premium consumer-electronics storefront built to explore Apple-style product m
 ![CI](https://github.com/mertyerturun/Techne_E-Commerce/actions/workflows/ci.yml/badge.svg)
 
 <p align="center">
-  <img src="docs/screenshots/homepage.jpg" alt="TECHNE homepage — product hero section" width="49%" />
-  <img src="docs/screenshots/product-detail.jpg" alt="TECHNE product detail page" width="49%" />
+  <img src="docs/screenshots/homepage.png" alt="TECHNE homepage — product hero section" width="49%" />
+  <img src="docs/screenshots/product-detail.png" alt="TECHNE product detail page" width="49%" />
 </p>
 
 ## Overview
